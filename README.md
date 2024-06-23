@@ -12,7 +12,7 @@
 
 <sup>1</sup>equal contribution
 
-Published as a conference paper at CoRL'2023
+Published as a conference paper at CoRL'2023.
 
 
 <!-- PROJECT LOGO -->
@@ -31,8 +31,9 @@ Published as a conference paper at CoRL'2023
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
-    <li><a href="#dependencies">Dependencies</a></li>
-    <li><a href="#example">Example</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#training">Training</a></li>
+    <li><a href="#closed-loop-simulation">Closed-loop Simulation</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -43,10 +44,37 @@ Published as a conference paper at CoRL'2023
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This repository implements a general RL-based framework for approximate belief-space HJI Reachability.
+This repository implements a general RL-based framework for approximate HJI Reachability analysis in joint physical-belief spaces.
+The control policies explicitly account for a robot's ability to learn and adapt at runtime.
+The repository is primarily developed and maintained by [Haimin Hu](https://haiminhu.org/) and [Zixu Zhang](https://zzx9636.github.io/).
 
 Click to watch our spotlight video:
 [![Watch the video](misc/Deception_Game.jpg)](https://haiminhu.org/wp-content/uploads/2024/06/deception_game.mp4)
+
+
+## Installation
+This repository relies on [`ISAACS`](https://github.com/SafeRoboticsLab/ISAACS). Please follow the instructions there to set up the environment.
+
+
+## Training
+Please follow these steps to train the control and disturbance/adversary policies.
++ Pretrain a control policy
+  ```bash
+  python script/bgame_intent_pretrain_ctrl.py
+  ```
++ Pretrain a disturbance policy
+  ```bash
+  python script/bgame_intent_pretrain_dstb.py
+  ```
++ Joint control-disturbance training
+  ```bash
+  python script/bgame_intent_isaacs.py
+  ```
+To train the baseline policies, replace `bgame` with `robust` and repeat the above steps.
+
+
+## Closed-loop Simulation
+We provide a [Notebook](https://github.com/SafeRoboticsLab/Deception_Game/blob/main/simulation.ipynb) for testing the trained policies in closed-loop simulations and comparing with baselines.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
