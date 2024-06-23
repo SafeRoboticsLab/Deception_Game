@@ -1,0 +1,28 @@
+*.asv
+*.DS_Store
+
+# folder
+wandb/
+__pycache__/
+.ipynb_checkpoints/
+.vscode/
+figure/
+graveyard/
+tmp/
+notebook/
+**/dataset/
+archive/
+notebook/
+**/__pycache__/
+results*
+
+# file type
+*.egg-info
+*.egg
+*.pyc
+*.code-workspace
+**/*tmp*
+*.pkl
+test_ilqr_race_car.py
+optimized_dp/example*
+*dataset*

@@ -1,0 +1,244 @@
+environment:
+  seed: 0
+  # TRACK
+  track_len: 100
+  track_width_right: 5.0
+  track_width_left: 17.5
+  track_center_py: 5.0
+  track_width_left_narrow: 6.5
+  track_two_lane_end: 60
+  track_four_lane_start: 90
+  # loop: true
+  timeout: 300
+
+  # DONE FLAG PARAM
+  end_criterion: failure
+  g_x_fail: 0.1
+
+  # OBSTACLES
+  obs_type: perfect
+  obs_spec: []
+
+  # RANGE OF STATE SPACE FOR RESET
+  reset_space:
+    - [0., 1.]   # x (local frame in [0., 1.])
+    - [0., 10.]  # y (m)
+    - [13., 18.]    # v (m/s)
+    - [-0.75, 0.75]   # psi (was [-1.5707, 1.5707])
+    - [-0.35, 0.35]   # delta
+    - [75., 95.]   # xH (m)
+    - [0., 22.5]  # yH (m)
+    - [0., 5.]   # bP (before softmax)
+    - [0., 5.]   # bC (before softmax)
+    - [0., 5.]   # bIntents (NOTE: needs to be consistent with num_intent)
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+    - [0., 5.]
+
+cost:
+  bidirectional: false
+  cost_type: Lagrange
+  # CONSTRAINT PARAM
+  q1_road: 1.
+  q2_road: 10.
+  q1_yaw: 1.
+  q2_yaw: 10.
+  q1_v: 1.
+  q2_v: 10.
+  q1_obs: 1.
+  q2_obs: 10.
+  # COST PARAM
+  track_offset: 0.
+  w_vel: 4.
+  w_contour: 4.
+  w_theta: 0.
+  w_accel: 0.01
+  w_omega: 0.01
+  v_ref: 15.
+  barrier_clip_min: -0.25
+  barrier_clip_max: 5.0
+  # COST PARAM - LIMITS
+  yaw_min: -1.5707
+  yaw_max: 1.5707
+  v_min: 0.
+  v_max: 20.
+  collision_dist: 3.0
+  position_indices:
+    x1: 0   # AV px
+    y1: 1   # AV py
+    x2: 5   # human px
+    y2: 6   # human py
+
+  has_vel_constr: True
+  has_delta_constr: false
+  has_obs_constr: false
+
+agent:
+  agent_id: ego  # not to confuse with the ego agent (actor 0)
+  dyn: BeliefGameDynamicsWithIntents
+  footprint: Box
+  state_box_limit: [0., 4.5, -0.9, 0.9]   # footprint [x_min, x_max, y_min, y_max]
+  action_range:
+    ctrl:
+      - [-6., 4.]
+      - [-2.5, 2.5]
+    dstb:
+      - [-0.75, 0.75]
+      - [-8.0, 2.0]
+  weight : 1760  # kg
+  # DSTB SCENARIO (TYPE) CONTROL BOUNDS
+  dstb_scenario:  # Control bounds of different types, order needs to match def of belief states
+    [[ [-0.75, 0.75],
+      [-2.0, 2.0]],
+    [  [-0.75, 0.75],
+      [-8.0, 0.0]]]
+  # CAR DYNAMICS
+  wheelbase: 2.9  # m
+  dt: 0.1
+  v_min: 0.
+  v_max: 20.
+  delta_min: -0.35
+  delta_max: 0.35
+  # BELIEF DYNAMICS
+  bel_thres: 0.2
+  bel_thres_intent: 0.05   # (NOTE: need to be smaller than 1/num_intent)
+  # -> TYPE HYPOTHESES
+  GMM_coeff: [0.5, 0.5]
+  mu_ped: [-1.0, 1.0]
+  mu_cyc: [-5.0, -5.0]
+  alpha_ped: 16.0
+  alpha_cyc: 16.0
+  beta_ped: 2.0
+  beta_cyc: 2.0
+  # -> INTENT HYPOTHESES
+  alpha_intent: 16.0
+  beta_intent: 2.0
+  intent_set:   # hypothesized opponent goal positions (xH, yH)
+    - [65., 0.]
+    - [75., 0.]
+    - [85., 0.]
+    - [95., 0.]
+    - [105., 0.]
+    - [60., 11.5]
+    - [75., 17.]
+    - [90., 22.5]
+    - [105., 22.5]
+  K_vx: -0.4
+  K_vy: -0.4
+  eps_vx: 0.2
+  eps_vy: 3.0
+
+solver:
+  device: cuda:0
+  # training
+  num_envs: 8
+  max_steps: 1000000
+  memory_capacity: 50000
+  min_steps_b4_opt: 50000
+  opt_freq: 2000
+  update_per_opt: 200
+  max_model: 50
+  batch_size: 128
+  warmup_action_range:
+    - [-6., 4.]
+    - [-2.5, 2.5]
+  # evaluation
+  check_opt_freq: 25
+  num_eval_traj: 400
+  eval_timeout: 300
+  rollout_end_criterion: failure
+  save_top_k: 10
+  save_metric: safety
+  venv_device: cpu
+  # visualization
+  fig_size_x: 10
+  fig_size_y: 2
+  cmap_res_x: 250
+  cmap_res_y: 10
+  # logs
+  use_wandb: true
+  project_name: bgame_intent_pretrain_dstb
+  name: v2
+  out_folder: experiments/bgame_intent_pre_dstb/v2
+
+arch:
+  actor_0:  # ego
+    mlp_dim:
+      - 256
+      - 256
+      - 256
+    activation: ReLU
+    append_dim: 0
+    latent_dim: 0
+    obs_dim: 18   # (NOTE: equal to 9 + num_intent)
+    action_dim: 2
+    action_range:
+      [ [-6., 4.],
+        [-2.5, 2.5]]
+    pretrained_path: experiments/bgame_intent_pre_ctrl/v1/model/ctrl/ctrl-500000.pth
+  actor_1:  # opponent
+    mlp_dim:
+      - 256
+      - 256
+      - 256
+    activation: ReLU
+    append_dim: 0
+    latent_dim: 0
+    obs_dim: 18   # (NOTE: equal to 9 + num_intent)
+    action_dim: 2
+    action_range:
+      [ [-0.75, 0.75],
+        [-8.0, 2.0]]
+  critic_0:
+    mlp_dim:
+      - 128
+      - 128
+      - 128
+    activation: ReLU
+    append_dim: 0
+    latent_dim: 0
+    obs_dim: 18   # (NOTE: equal to 9 + num_intent)
+    action_dim: 4
+    pretrained_path: experiments/bgame_intent_pre_ctrl/v1/model/aux/aux-500000.pth
+
+train:
+  num_actors: 2
+  num_critics: 1
+  critic_0:
+    net_name: central
+    lr: 0.0001
+    lr_schedule: false
+    gamma: 0.999
+    gamma_schedule: false
+    tau: 0.005
+    eval: false
+    mode: safety
+    terminal_type: max
+    device: cuda:0
+    opt_type: AdamW
+    action_src: [ctrl, dstb]
+    update_target_period: 2
+  actor_0:
+    net_name: ctrl
+    actor_type: min
+    eval: true
+    device: cuda:0
+  actor_1:
+    net_name: dstb
+    actor_type: max
+    device: cuda:0
+    eval: false
+    learn_alpha: true
+    lr: 0.0001
+    lr_al: 0.00001
+    lr_schedule: false
+    lr_al_schedule: false
+    alpha: 0.005
+    pg_target: central
+    opt_type: AdamW
+    update_period: 2
