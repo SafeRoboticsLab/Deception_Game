@@ -21,5 +21,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Code in optimized_dp/ adapted from https://github.com/SFU-MARS/optimized_dp
-Code in quickzonoreach/ adapted from https://github.com/stanleybak/quickzonoreach
+Code in agent/ and simulators/ adapted from https://github.com/SafeRoboticsLab/ISAACS
