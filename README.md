@@ -35,7 +35,7 @@
 This repository implements a general RL-based framework for approximate belief-space HJI Reachability.
 
 Click to watch our spotlight video:
-[![Watch the video](misc/Deception_Game.jpg)](misc/Deception_Game.mp4)
+[![Watch the video](misc/Deception_Game.jpg)](https://haiminhu.org/wp-content/uploads/2024/06/deception_game.mp4)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
