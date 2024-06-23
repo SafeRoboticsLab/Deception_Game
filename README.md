@@ -4,11 +4,22 @@
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue)](https://www.python.org/downloads/)
 
 
+[Haimin Hu](https://haiminhu.org/)<sup>1</sup>,
+[Zixu Zhang](https://zzx9636.github.io/)<sup>1</sup>,
+[Kensuke Nakamura](https://kensukenk.github.io/),
+[Andrea Bajcsy](https://www.cs.cmu.edu/~abajcsy/),
+[Jaime F. Fisac](https://saferobotics.princeton.edu/jaime)
+
+<sup>1</sup>equal contribution
+
+Published as a conference paper at CoRL'2023
+
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
   <a href="https://github.com/SafeRoboticsLab/Deception_Game">
-    <img src="misc/road_crossing.gif" alt="Logo" width="600">
+    <img src="misc/road_crossing.gif" alt="Logo" width="800">
   </a>
   <p align="center">
   </p>
