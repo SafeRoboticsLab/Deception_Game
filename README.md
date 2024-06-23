@@ -1,4 +1,4 @@
-# Deception game: Closing the safety-learning loop in interactive robot autonomy
+# Deception Game: Closing the safety-learning loop in interactive robot autonomy
 
 [![License][license-shield]][license-url]
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue)](https://www.python.org/downloads/)
