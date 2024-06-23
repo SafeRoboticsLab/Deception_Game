@@ -75,7 +75,7 @@ To train the baseline policies, replace `bgame` with `robust` and repeat the abo
 
 
 ## Closed-loop Simulation
-We provide a [Notebook](https://github.com/SafeRoboticsLab/Deception_Game/blob/main/simulation.ipynb) for testing the trained policies in closed-loop simulations and comparing with baselines.
+We provide a [Notebook](https://github.com/SafeRoboticsLab/Deception_Game/blob/main/simulation.ipynb) for testing the trained policies in closed-loop simulations and comparing to baselines.
 
 
 <!-- LICENSE -->
